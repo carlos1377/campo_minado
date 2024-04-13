@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Campo minado</title>
+  </head>
+  <body>
+    <label for="">X:</label>
+    <input id="inputX" value="" />
+    <label for="">Y:</label>
+    <input id="inputY" type="" value="" />
+    <label for="">Bombas:</label>
+    <input id="inputBombs" type="" value="" />
+
+    <button type="submit" id="create_button">Criar jogo</button>
+    <script type="text/javascript">
+      const inputX = document.getElementById("inputX");
+      const inputY = document.getElementById("inputY");
+      const inputBombs = document.getElementById("inputBombs");
+      const button = document.getElementById("create_button");
+
+      // button.addEventListener("click", showAlert, false);
+
+      // function showAlert() {
+      //   window.alert(`X:${inputX.value} Y:${inputY.value}`);
+      // }
+
+      button.addEventListener("click", createGame, false);
+
+      function createGame() {}
+    </script>
+
+    <p id="test"></p>
+  </body>
+</html>
