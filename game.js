@@ -1,10 +1,19 @@
 const canvas = document.getElementById('jogo');
 const ctx = canvas.getContext('2d');
+const inputX = document.getElementById("inputX")
+const inputY = document.getElementById("inputY")
+const inputBombs = document.getElementById("inputBombs")
 
 var tiles = [];
-const nTilesX = 10;
-const nTilesy = 10;
-var nBombs = 10
+// const nTilesX = 10;
+const nTilesX = inputX.value;
+const nTilesY = inputY.value;
+// const nTilesy = 10;
+const lenTilesPx = 5;
+const lineTilesPx = 1;
+// var nBombs = 30
+var nBombs = inputBombs.value
+const count = (((nTilesX * nTilesY) * lenTilesPx) + (lineTilesPx * lenTilesPx) + 1)
 
 class Tile {
     constructor(i, j) {
@@ -14,11 +23,12 @@ class Tile {
         this.isOpen = false;
         this.bombsAround = 0;
         this.marked = false;
+        this.openAround = false;
     }
 }
 function generateTiles() {
     for (let i = 0; i < nTilesX; i++) {
-        for (let j = 0; j < nTilesy; j++) {
+        for (let j = 0; j < nTilesY; j++) {
             let tile = new Tile(i, j);
             tiles.push(tile);
         }
@@ -56,24 +66,23 @@ function getTile(i, j) {
 }
 
 generateTiles();
-
 function draw() {
-    ctx.clearRect(0, 0, 511, 511)
+    ctx.clearRect(0, 0, count, count)
     tiles.map(t => {
         drawTile(t)
     })
 }
 
 function drawTile(tile) {
-    let x = (tile.i * 51) + 1
-    let y = (tile.j * 51) + 1
+    let x = (tile.i * ((nTilesX * lenTilesPx) + 1) + 1)
+    let y = (tile.j * ((nTilesY * lenTilesPx) + 1) + 1)
     if (tile.isOpen) {
         if (tile.isBomb) {
             ctx.fillStyle = "#ff0000"
-            ctx.fillRect(x, y, 50, 50)
+            ctx.fillRect(x, y, (nTilesX * lenTilesPx), (nTilesY * lenTilesPx))
         } else {
             ctx.fillStyle = "#999999"
-            ctx.fillRect(x, y, 50, 50)
+            ctx.fillRect(x, y, (nTilesX * lenTilesPx), (nTilesY * lenTilesPx))
             if (tile.bombsAround) {
                 ctx.font = "30px Arial"
                 ctx.textAlign = "center"
@@ -83,8 +92,30 @@ function drawTile(tile) {
         }
 
     } else {
-        ctx.fillStyle = "#aaaaaa"
-        ctx.fillRect(x, y, 50, 50)
+        if (tile.marked) {
+            ctx.fillStyle = "#0000ff"
+        }
+        else {
+            ctx.fillStyle = "#aaaaaa"
+        }
+        ctx.fillRect(x, y, (nTilesX * lenTilesPx), (nTilesY * lenTilesPx))
+    }
+}
+
+function openTile(tile) {
+    tile.isOpen = true
+    if (!tile.openAround && tile.bombsAround == 0) openAround(tile)
+}
+
+function openAround(tile) {
+    tile.openAround = true
+    for (let i = tile.i - 1; i <= tile.i + 1; i++) {
+        for (let j = tile.j - 1; j <= tile.j + 1; j++) {
+            if (i != tile.i || j != tile.j) {
+                const currentTile = getTile(i, j)
+                if (currentTile && !currentTile.isBomb) openTile(currentTile)
+            }
+        }
     }
 }
 
@@ -97,10 +128,27 @@ document.addEventListener('click', e => {
     const mouseX = e.clientX - rect.left
     const mouseY = e.clientY - rect.top
 
-    const i = Math.floor((mouseX / 511) * 10)
-    const j = Math.floor((mouseY / 511) * 10)
+    const i = Math.floor((mouseX / count) * 10)
+    const j = Math.floor((mouseY / count) * 10)
 
     let tile = getTile(i, j)
+    openTile(tile)
     tile.isOpen = true
     draw()
+})
+
+
+document.addEventListener("contextmenu", e => {
+    e.preventDefault()
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left
+    const mouseY = e.clientY - rect.top
+
+    const i = Math.floor((mouseX / count) * 10)
+    const j = Math.floor((mouseY / count) * 10)
+
+    let tile = getTile(i, j)
+    tile.marked = !tile.marked
+    draw()
+
 })
