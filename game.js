@@ -15,6 +15,8 @@ const lineTilesPx = 1;
 var nBombs = inputBombs.value
 const count = (((nTilesX * nTilesY) * lenTilesPx) + (lineTilesPx * lenTilesPx) + 1)
 
+
+
 class Tile {
     constructor(i, j) {
         this.i = i;

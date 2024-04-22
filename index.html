@@ -2,19 +2,33 @@
 <html>
   <head>
     <title>Campo Minado</title>
+    <link rel="stylesheet" href="style.css"/>
   </head>
-  <header>
-    X:<input id="inputX" type="number" value="" max="50" /> Y:<inputid
-      ="inputY"
-      type=""
-      value=""
-    />
-    bombas:<input id="inputBombs" type="" value="" />
-    <button type="submit">Criar jogo</button>
-  </header>
+  
+<header class="topo">
+  <h1>Bem vindo ao Campo Minado!</h1>
+</header>
+
+  <section class="card">
+    <div class="card-itens">
+      <div class="card-elementos">X:</div><input class="input-X" id="inputX" type="number" value="" max="50" /> 
+    </div>
+    <div class="card-itens">
+      <div class="card-elementos">Y:</div><input class="input-Y" id="inputY" type="number" value=""/>
+    </div>
+    <div class="card-itens">
+      <div class="card-elementos">Bombas:</div><input class="input-bombas" type="number" value="" />
+    </div>
+    <button class="btn-criarGame" id="inputCriarGame" type="submit">Criar jogo</button>
+  </section>
+  
   <body>
     <br />
     <canvas id="jogo" width="511" height="511"> </canvas>
     <script type="text/javascript" src="game.js"></script>
   </body>
+
+  <footer>
+
+  </footer>
 </html>
